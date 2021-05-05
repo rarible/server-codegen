@@ -22,6 +22,7 @@ public class RaribleServerGenerator extends KotlinSpringServerCodegen implements
     embeddedTemplateDir = templateDir = "rarible-server";
     setUseTags(true);
     setInterfaceOnly(true);
+    setModelNameSuffix("Dto");
     setModelPackage("com.rarible.protocol.dto");
     setReactive(true);
     setExceptionHandler(false);
