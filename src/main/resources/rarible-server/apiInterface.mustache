@@ -47,12 +47,6 @@ import kotlin.collections.Map
 {{#useBeanValidation}}
 @Validated
 {{/useBeanValidation}}
-{{#swaggerAnnotations}}
-@Api(value = "{{{baseName}}}", description = "The {{{baseName}}} API")
-{{/swaggerAnnotations}}
-{{=<% %>=}}
-@RequestMapping("\${api.base-path:<%contextPath%>}")
-<%={{ }}=%>
 {{#operations}}
 interface {{classname}} {
 {{#isDelegate}}
@@ -69,7 +63,7 @@ interface {{classname}} {
             consumes = [{{#consumes}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/consumes}}]{{/hasConsumes}}{{/singleContentTypes}}
     )
     {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}0({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}> {
-    		return withMdc {
+    		return com.rarible.core.logging.withMdc {
     				{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
     		}
     }
@@ -79,6 +73,3 @@ interface {{classname}} {
 }
 {{/operations}}
 
-private suspend fun <T> withMdc(block: suspend () -> T): T {
-    return block()
-}

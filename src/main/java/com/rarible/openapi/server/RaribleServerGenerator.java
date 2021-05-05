@@ -25,11 +25,17 @@ public class RaribleServerGenerator extends KotlinSpringServerCodegen implements
     setModelPackage("com.rarible.protocol.dto");
     setReactive(true);
     setExceptionHandler(false);
+    setUseBeanValidation(false);
   }
 
   @Override
   public void processOpts() {
     super.processOpts();
     supportingFiles = supportingFiles.stream().filter(it -> !it.getTemplateFile().toLowerCase().contains("gradle")).collect(Collectors.toList());
+    importMapping.put("Address", "scalether.domain.Address");
+    importMapping.put("Word", "io.daonomic.rpc.domain.Word");
+    importMapping.put("Binary", "io.daonomic.rpc.domain.Binary");
+    importMapping.put("BigInteger", "java.math.BigInteger");
+    importMapping.put("BigDecimal", "java.math.BigDecimal");
   }
 }
