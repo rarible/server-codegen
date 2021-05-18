@@ -54,7 +54,10 @@ interface {{classname}} {
     fun getDelegate(): {{classname}}Delegate = object: {{classname}}Delegate {}
 {{/isDelegate}}
 {{#operation}}
-
+		{{#isArray}}
+    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}({{#allParams}}{{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}>
+		{{/isArray}}
+		{{^isArray}}
     @{{#lambda.titlecase}}{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}{{/lambda.titlecase}}Mapping(
             value = ["{{#lambda.escapeDoubleQuote}}{{path}}{{/lambda.escapeDoubleQuote}}"]{{#singleContentTypes}}{{#hasProduces}},
             produces = "{{{vendorExtensions.x-accepts}}}"{{/hasProduces}}{{#hasConsumes}},
@@ -69,6 +72,7 @@ interface {{classname}} {
     }
 
     {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}({{#allParams}}{{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}>
+    {{/isArray}}
 {{/operation}}
 }
 {{/operations}}
