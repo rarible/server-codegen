@@ -5,6 +5,7 @@
 */
 package {{package}}
 
+import com.rarible.core.logging.withMdc
 {{#imports}}import {{import}}
 {{/imports}}
 {{#swaggerAnnotations}}
@@ -54,6 +55,9 @@ interface {{classname}} {
     fun getDelegate(): {{classname}}Delegate = object: {{classname}}Delegate {}
 {{/isDelegate}}
 {{#operation}}
+
+
+    //--------------------- {{operationId}} --------------------- //
 	{{#isArray}}
 	@{{#lambda.titlecase}}{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}{{/lambda.titlecase}}Mapping(
             value = ["{{#lambda.escapeDoubleQuote}}{{path}}{{/lambda.escapeDoubleQuote}}"]{{#singleContentTypes}}{{#hasProduces}},
@@ -62,7 +66,11 @@ interface {{classname}} {
             produces = [{{#produces}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/produces}}]{{/hasProduces}}{{#hasConsumes}},
             consumes = [{{#consumes}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/consumes}}]{{/hasConsumes}}{{/singleContentTypes}}
     )
-    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}({{#allParams}}{{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}>
+    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}(
+    {{#allParams}}
+        {{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{^-last}},{{/-last}}
+    {{/allParams}}
+    ): ResponseEntity<{{>returnTypes}}>
 	{{/isArray}}
 	{{^isArray}}
     @{{#lambda.titlecase}}{{#lambda.lowercase}}{{httpMethod}}{{/lambda.lowercase}}{{/lambda.titlecase}}Mapping(
@@ -72,13 +80,19 @@ interface {{classname}} {
             produces = [{{#produces}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/produces}}]{{/hasProduces}}{{#hasConsumes}},
             consumes = [{{#consumes}}"{{{mediaType}}}"{{^-last}}, {{/-last}}{{/consumes}}]{{/hasConsumes}}{{/singleContentTypes}}
     )
-    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}0({{#allParams}}{{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}> {
-    		return com.rarible.core.logging.withMdc {
-    				{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
-    		}
+    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}0(
+    {{#allParams}}
+        {{>queryParams}}{{>pathParams}}{{>headerParams}}{{>bodyParams}}{{>formParams}}{{^-last}}, {{/-last}}
+    {{/allParams}}
+    ): ResponseEntity<{{>returnTypes}}> {
+        return withMdc { {{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})}
     }
 
-    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}({{#allParams}}{{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}{{/allParams}}): ResponseEntity<{{>returnTypes}}>
+    {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}(
+    {{#allParams}}
+        {{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}
+    {{/allParams}}
+    ): ResponseEntity<{{>returnTypes}}>
     {{/isArray}}
 {{/operation}}
 }
