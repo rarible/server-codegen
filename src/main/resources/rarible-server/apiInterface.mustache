@@ -90,7 +90,7 @@ interface {{classname}} {
 
     {{#reactive}}{{^isArray}}suspend {{/isArray}}{{/reactive}}fun {{operationId}}(
     {{#allParams}}
-        {{paramName}}: {{>optionalDataType}}{{^-last}}, {{/-last}}
+        {{paramName}}: {{^isBodyParam}}{{>optionalDataType}}{{/isBodyParam}}{{#isBodyParam}}{{^reactive}}{{>optionalDataType}}{{/reactive}}{{#reactive}}{{^isArray}}{{>optionalDataType}}{{/isArray}}{{#isArray}}Flow<{{{baseType}}}>{{/isArray}}{{/reactive}}{{/isBodyParam}}{{^-last}}, {{/-last}}
     {{/allParams}}
     ): ResponseEntity<{{>returnTypes}}>
     {{/isArray}}

@@ -5,7 +5,7 @@
     <artifactId>rarible-server-openapi-generator</artifactId>
     <packaging>jar</packaging>
     <name>rarible-server-openapi-generator</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <distributionManagement>
         <repository>
