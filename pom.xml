@@ -9,9 +9,8 @@
 
     <distributionManagement>
         <repository>
-            <id>github</id>
-            <name>GitHub Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/rariblecom/server-codegen</url>
+            <id>nexus-releases</id>
+            <url>http://nexus.rarible.int/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
